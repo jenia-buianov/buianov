@@ -1,0 +1,10 @@
+<content>
+<style>
+.btn-label:hover{width:100%;}
+.btn-label {margin-top:10px;}
+</style>
+<div id="loading" style="text-align:center;display:none;margin:30px;"><img src="<? echo $admin_page;?>assets/img/load.gif"></div>
+<div style="width:33%;display:inline-block;vertical-align:top"><a class="btn btn-lg btn-primary-alt btn-label" href="#" onclick=content('settings/left')><i class="fa fa-chevron-left"></i> <? echo language('left_menu',$lang); ?></a><br><a class="btn btn-lg btn-primary-alt btn-label" href="#" onclick=content('settings/params')><i class="fa fa-times"></i> <? echo language('params',$lang); ?></a><br><a class="btn btn-lg btn-primary-alt btn-label" href="#" onclick=content('settings/top_menu')><i class="fa fa-bars"></i> <? echo language('top_menu',$lang); ?></a></div>
+<div style="width:33%;display:inline-block;text-align:center;vertical-align:top"><a class="btn btn-lg btn-danger-alt btn-label" href="#" onclick=content('settings/security/<? echo $admin_user[user];?>')><i class="fa fa-lock"></i> <? echo language('security',$lang); ?></a><br><a class="btn btn-lg btn-danger-alt btn-label" href="#" onclick=content('settings/backup')><i class="fa fa-undo"></i> <? echo language('backup',$lang); ?></a><br><a class="btn btn-lg btn-danger-alt btn-label" href="#" onclick=content('settings/language')><i class="fa fa-language"></i> <? echo language('language',$lang); ?></a></div>
+<div style="width:33%;display:inline-block;text-align:right;vertical-align:top"><a class="btn btn-lg btn-info-alt btn-label" href="#" onclick=content('settings/right')><i class="fa fa-chevron-right"></i> <? echo language('right_menu',$lang); ?></a><br><a class="btn btn-lg btn-info-alt btn-label" href="#" onclick=content('settings/wijets')><i class="fa fa-briefcase"></i> <? echo language('widgets',$lang); ?></a><br><a class="btn btn-lg btn-info-alt btn-label" href="#" onclick=content('settings/panels')><i class="fa fa-headphones"></i> <? echo language('panels',$lang); ?></a></div>
+</content>

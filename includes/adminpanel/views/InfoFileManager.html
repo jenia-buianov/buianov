@@ -1,0 +1,10 @@
+ <?php
+
+echo '<div style="text-align: center"><i class="fa fa-'.InfoFileManager_Model::$Icons[0].' fa-2x" aria-hidden="true" style="color:';
+if (InfoFileManager_Model::$Icons[0]=='folder') echo'#FFB300'; else echo'#039BE5';
+echo'"></i></div>';
+ echo '<h3 style="text-align: center;margin-top: 1em;margin-bottom: 2em; ">'.InfoFileManager_Model::$fileInfo[0][0].'</h3>';
+ echo '<p><label style="width:50%">Дата:</label> '.InfoFileManager_Model::$fileInfo[0][1].'</p>';
+ echo '<p><label style="width:50%">Время:</label> '.InfoFileManager_Model::$fileInfo[0][2].'</p>';
+ echo '<p><label style="width:50%">Владелец:</label> '.InfoFileManager_Model::$fileInfo[0][3].'</p>';
+?>

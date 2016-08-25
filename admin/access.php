@@ -1,3 +1,0 @@
-﻿<?php//session_start();
-include("bd.php");$sql_ = mysql_query("SELECT * FROM admin_code ORDER BY id DESC LIMIT 1");if (mysql_num_rows($sql_)>0){	$ss = mysql_fetch_array($sql_);	$times = $ss['time'];	if ($ss[code]==$_POST[code]&&$dd-$times<6&&$ip=$ss[ip]){		session_start();		$letter = array('0','1','2','3','4','5','6','7','8','9','A','Q','W','E','R','T','Y','U','I','O','P','S','D','F','G','H','J','K','L','Z','X','C','V','B','N','M');$rnd = rand(8,10);$i = 0;$code = '';while($i<$rnd){	$code.=$letter[rand(0,count($letter)-1)];	$i++;}		$_SESSION['s'] = $code;		$upd = mysql_query("UPDATE admin_code SET session='$code' WHERE id='$ss[id]'");		echo 'ok';	}else{echo 'Код не верен или время его действия прошло';}}
-?>

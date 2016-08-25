@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 23 Jun 2016 08:53:06 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Mosaddek">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="img/favicon.html">
+
+    <title><?php echo ADMIN_CONFIGURATION::$CONFIG['AMINPANELTITLE']; ?></title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" type="text/css" media="screen"/>
+    <link rel="stylesheet" href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/owl.carousel.css" type="text/css">
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/toastr-master/toastr.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/nprogress.css" rel="stylesheet">
+
+    <!--right slidebar-->
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/slidebars.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/style.css" rel="stylesheet">
+    <link href="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/css/style-responsive.css" rel="stylesheet" />
+	<script>
+	admin_url = '<?php echo ADMIN_CONFIGURATION::$CONFIG['adminURL']; ?>';
+	home_url = '<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>';
+	LANG = '<?php echo LANG; ?>';
+	</script>
+
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 tooltipss and media queries -->
+    <!--[if lt IE 9]>
+      <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/html5shiv.js"></script>
+      <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+  <i class="fa fa-arrow-circle-o-up fa-2x" id="to-top" aria-hidden="true"></i>
+  <section id="container" >
+      <!--header start-->
+      <header class="header white-bg">
+              <div class="sidebar-toggle-box">
+                  <i class="fa fa-bars"></i>
+              </div>
+            <!--logo start-->
+            <a href="<?php echo ADMIN_CONFIGURATION::$CONFIG['adminURL']; ?>" class="logo"><?php echo ADMIN_CONFIGURATION::$CONFIG['AMINPANELTITLE']; ?></a>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
+                <!--  notification start -->
+                <ul class="nav top-menu">
+                    <!-- settings start -->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="fa fa-calendar-o"></i>
+                            <?php
+							$CountCalendar = new ADMIN_CALENDAR('C');  if ((string) $CountCalendar!=="0") echo '<span class="badge bg-success">'.$CountCalendar.'</span>';
+							?>
+                            
+                        </a>
+                        <ul class="dropdown-menu extended tasks-bar">
+                            <div class="notify-arrow notify-arrow-green"></div>
+                           <?php echo new ADMIN_CALENDAR('0'); ?>
+                        </ul>
+                    </li>
+                    <!-- settings end -->
+                    <!-- inbox dropdown start-->
+                    <li id="header_inbox_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <i class="fa fa-envelope-o"></i>
+                            <?php $CountInbox = new ADMIN_INBOX('C');  if ((string) $CountInbox!=="0") echo '<span class="badge bg-danger">'.$CountInbox.'</span>'; ?>
+                        </a>
+                        <ul class="dropdown-menu extended inbox">
+                            <div class="notify-arrow notify-arrow-red"></div>
+                            <?php echo new ADMIN_INBOX('0'); ?>
+                        </ul>
+                    </li>
+                    <!-- inbox dropdown end -->
+                    <!-- notification dropdown start-->
+                    <li id="header_notification_bar" class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+                            <i class="fa fa-bell-o"></i>
+							<?php $CountNotifications = new ADMIN_NOTIFOCATIONS('C');  if ((string) $CountNotifications!=="0") echo '<span class="badge bg-warning">'.$CountNotifications.'</span>'; ?>
+                           
+                        </a>
+                        <ul class="dropdown-menu extended notification">
+                            <div class="notify-arrow notify-arrow-yellow"></div>
+                            <?php echo new ADMIN_NOTIFOCATIONS('0'); ?>
+                        </ul>
+                    </li>
+                    <!-- notification dropdown end -->
+                </ul>
+                <!--  notification end -->
+            </div>
+            <div class="top-nav ">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <li>
+                        <input type="text" class="form-control search" placeholder="<?php new ADMIN_TRANSLATION(LANG,'search',1,1); ?>">
+                    </li>
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="username">Евгений Буянов</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout">
+                            <div class="log-arrow-up"></div>
+                            <li><a href="<?php echo ADMIN_CONFIGURATION::$CONFIG['adminURL']; ?>logout.php"><i class="fa fa-key"></i> <?php new ADMIN_TRANSLATION(LANG,'logout',1,1); ?></a></li>
+                        </ul>
+                    </li>
+                    <li class="sb-toggle-right">
+                        <i class="fa  fa-align-right"></i>
+                    </li>
+                    <!-- user login dropdown end -->
+                </ul>
+                <!--search & user info end-->
+            </div>
+        </header>
+      <!--header end-->
+      <!--sidebar start-->
+      <aside>
+          <div id="sidebar"  class="nav-collapse ">
+              <!-- sidebar menu start-->
+              <ul class="sidebar-menu" id="nav-accordion">
+                  <?php echo new ADMIN_MENU(); ?>
+               </ul>
+              <!-- sidebar menu end-->
+          </div>
+      </aside>
+      <!--sidebar end-->
+      <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper">          
+			<?php
+			echo '<section class="panel"><header class="panel-heading">'.new ADMIN_TRANSLATION(LANG,ADMIN_CONFIGURATION::$PAGE['moduleNameLang'],1,0).'</header>
+			<div class="panel-body">';
+
+			if (file_exists(dirname(__FILE__).'/'.MODULE.'.html')) include (dirname(__FILE__).'/'.MODULE.'.html');
+			else echo 'Cannot include file '.MODULE.'. File wasn\'t found on server';
+			echo '
+			</div>
+			</section>';
+			?>
+          </section>
+      </section>
+      <!--main content end-->
+
+      <!-- Right Slidebar start -->
+      <div class="sb-slidebar sb-right sb-style-overlay">
+          <h5 class="side-title">Online Customers</h5>
+          <ul class="quick-chat-list">
+              <li class="online">
+                  <div class="media">
+                      <a href="#" class="pull-left media-thumb">
+                          <img alt="" src="img/chat-avatar2.jpg" class="media-object">
+                      </a>
+                      <div class="media-body">
+                          <strong>John Doe</strong>
+                          <small>Dream Land, AU</small>
+                      </div>
+                  </div><!-- media -->
+              </li>
+              <li class="online">
+                  <div class="media">
+                      <a href="#" class="pull-left media-thumb">
+                          <img alt="" src="img/chat-avatar.jpg" class="media-object">
+                      </a>
+                      <div class="media-body">
+                          <div class="media-status">
+                              <span class=" badge bg-important">3</span>
+                          </div>
+                          <strong>Jonathan Smith</strong>
+                          <small>United States</small>
+                      </div>
+                  </div><!-- media -->
+              </li>
+
+              <li class="online">
+                  <div class="media">
+                      <a href="#" class="pull-left media-thumb">
+                          <img alt="" src="img/pro-ac-1.png" class="media-object">
+                      </a>
+                      <div class="media-body">
+                          <div class="media-status">
+                              <span class=" badge bg-success">5</span>
+                          </div>
+                          <strong>Jane Doe</strong>
+                          <small>ABC, USA</small>
+                      </div>
+                  </div><!-- media -->
+              </li>
+              <li class="online">
+                  <div class="media">
+                      <a href="#" class="pull-left media-thumb">
+                          <img alt="" src="img/avatar1.jpg" class="media-object">
+                      </a>
+                      <div class="media-body">
+                          <strong>Anjelina Joli</strong>
+                          <small>Fockland, UK</small>
+                      </div>
+                  </div><!-- media -->
+              </li>
+              <li class="online">
+                  <div class="media">
+                      <a href="#" class="pull-left media-thumb">
+                          <img alt="" src="img/mail-avatar.jpg" class="media-object">
+                      </a>
+                      <div class="media-body">
+                          <div class="media-status">
+                              <span class=" badge bg-warning">7</span>
+                          </div>
+                          <strong>Mr Tasi</strong>
+                          <small>Dream Land, USA</small>
+                      </div>
+                  </div><!-- media -->
+              </li>
+          </ul>
+          <h5 class="side-title"> pending Task</h5>
+          <ul class="p-task tasks-bar">
+              <li>
+                  <a href="#">
+                      <div class="task-info">
+                          <div class="desc">Dashboard v1.3</div>
+                          <div class="percent">40%</div>
+                      </div>
+                      <div class="progress progress-striped">
+                          <div style="width: 40%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40" role="progressbar" class="progress-bar progress-bar-success">
+                              <span class="sr-only">40% Complete (success)</span>
+                          </div>
+                      </div>
+                  </a>
+              </li>
+              <li>
+                  <a href="#">
+                      <div class="task-info">
+                          <div class="desc">Database Update</div>
+                          <div class="percent">60%</div>
+                      </div>
+                      <div class="progress progress-striped">
+                          <div style="width: 60%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="60" role="progressbar" class="progress-bar progress-bar-warning">
+                              <span class="sr-only">60% Complete (warning)</span>
+                          </div>
+                      </div>
+                  </a>
+              </li>
+              <li>
+                  <a href="#">
+                      <div class="task-info">
+                          <div class="desc">Iphone Development</div>
+                          <div class="percent">87%</div>
+                      </div>
+                      <div class="progress progress-striped">
+                          <div style="width: 87%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar" class="progress-bar progress-bar-info">
+                              <span class="sr-only">87% Complete</span>
+                          </div>
+                      </div>
+                  </a>
+              </li>
+              <li>
+                  <a href="#">
+                      <div class="task-info">
+                          <div class="desc">Mobile App</div>
+                          <div class="percent">33%</div>
+                      </div>
+                      <div class="progress progress-striped">
+                          <div style="width: 33%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="80" role="progressbar" class="progress-bar progress-bar-danger">
+                              <span class="sr-only">33% Complete (danger)</span>
+                          </div>
+                      </div>
+                  </a>
+              </li>
+              <li>
+                  <a href="#">
+                      <div class="task-info">
+                          <div class="desc">Dashboard v1.3</div>
+                          <div class="percent">45%</div>
+                      </div>
+                      <div class="progress progress-striped active">
+                          <div style="width: 45%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="45" role="progressbar" class="progress-bar">
+                              <span class="sr-only">45% Complete</span>
+                          </div>
+                      </div>
+
+                  </a>
+              </li>
+              <li class="external">
+                  <a href="#">See All Tasks</a>
+              </li>
+          </ul>
+      </div>
+      <!-- Right Slidebar end -->
+
+      <!--footer start-->
+      <footer class="site-footer">
+          <div class="text-center">
+              2013 &copy; FlatLab by VectorLab.
+              <a href="#" class="go-top">
+                  <i class="fa fa-angle-up"></i>
+              </a>
+          </div>
+      </footer>
+      <!--footer end-->
+  </section>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                              <div class="modal-dialog modal-lg">
+                                  <div class="modal-content">
+                                      
+                                  </div><!-- /.modal-content -->
+                              </div><!-- /.modal-dialog -->
+                          </div>
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/bootstrap.min.js"></script>
+    <script class="include" type="text/javascript" src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.scrollTo.min.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.nicescroll.js" type="text/javascript"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.sparkline.js" type="text/javascript"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/owl.carousel.js" ></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.customSelect.min.js" ></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/respond.min.js" ></script>
+     
+
+    <!--right slidebar-->
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/slidebars.min.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/toastr-master/toastr.js"></script>
+
+    <!--common script for all pages-->
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/common-scripts.js"></script>
+
+    <!--script for this page-->
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/sparkline-chart.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/easy-pie-chart.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/count.js"></script>
+	<script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/nprogress.js"></script>
+    <script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/additionalJS.js"></script>
+  <script>
+
+      //owl carousel
+
+        $(document).ready(function() {
+			$("#to-top").hide();
+			$(window).scroll(function () {
+			if ($(this).scrollTop() > 100) {
+				$('#to-top').fadeIn(500);
+			} else {
+				$('#to-top').fadeOut(700);
+			}
+		});
+		$('#to-top').click(function () {
+			$('body,html').animate({
+				scrollTop: 0
+			}, 800);
+			return false;
+		});
+	
+
+
+            $('a').click(function() {
+                var url = $(this).attr('href');
+				var toggle = $(this).attr('data-toggle');
+				if (toggle=='modal'||url=='#') return 0;
+			  
+				NProgress.start();
+                $.ajax({
+                    url:     url + '?modal=1',
+                    success: function(data){
+                        $('.wrapper').html(data);
+						NProgress.done();
+                    }
+                });
+
+                if(url != window.location){
+                    window.history.pushState(null, null, url);
+					
+                }
+
+                return false;
+            });
+
+            $(window).bind('popstate', function() {
+				NProgress.start();
+                $.ajax({
+                    url:     location.pathname + '?modal=1',
+                    success: function(data) {
+                        $('.wrapper').html(data);
+						NProgress.done();
+                    }
+                });
+            });
+        });
+
+      $(document).ready(function() {
+          $("#owl-demo").owlCarousel({
+              navigation : true,
+              slideSpeed : 300,
+              paginationSpeed : 400,
+              singleItem : true,
+			  autoPlay:true
+
+          });
+      });
+
+      //custom select box
+
+      $(function(){
+          $('select.styled').customSelect();
+      });
+
+      $(window).on("resize",function(){
+          var owl = $("#owl-demo").data("owlCarousel");
+          owl.reinit();
+      });
+
+  </script>
+
+  </body>
+
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 23 Jun 2016 08:53:45 GMT -->
+</html>

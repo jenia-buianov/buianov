@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-xs-12 col-sm-8 col-md-10">
+
+        <div class="form-group">
+            <div class="input-group m-bot15">
+
+                <input type="text" class="form-control" id="searchFileManager" placeholder="<?php new ADMIN_TRANSLATION(LANG,'search',1,1) ?>">
+                <span class="input-group-btn">
+                                                <button type="button" class="btn btn-white"><i class="fa fa-search"></i></button>
+                                              </span>
+            </div>
+
+        </div>
+        <button data-toggle="button" class="btn btn-white active" aria-pressed="true">
+            <i class="fa fa-upload" style="color:#ff6c60"></i> <?php new ADMIN_TRANSLATION(LANG,'Upload',1,1)?>  </button>
+        <font id="createfolder" style="margin-left:1em">
+            <button data-toggle="button" class="btn btn-white active" aria-pressed="true">
+                <i class="fa fa-folder" style="color:#58c9f3"></i> <?php new ADMIN_TRANSLATION(LANG,'CreateFolder',1,1)?>  </button>
+        </font>
+        <div class="table-responsive" tabindex="1" style="outline: none;">
+            <table class="table" id="FileManageTable">
+                <thead>
+                <tr>
+                    <th><?php new ADMIN_TRANSLATION(LANG,'Icon',1,1); ?></th>
+                    <th><?php new ADMIN_TRANSLATION(LANG,'dirName',1,1); ?></th>
+                    <th><?php new ADMIN_TRANSLATION(LANG,'Owner',1,1); ?></th>
+                    <th><?php new ADMIN_TRANSLATION(LANG,'Size',1,1); ?></th>
+                    <th><?php new ADMIN_TRANSLATION(LANG,'Created',1,1); ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+
+                for($f = 0; $f<count(FileManager::$fileInfo);$f++)
+                {
+                    echo'<tr onclick=FileInfo("'.FileManager::$fileInfo[$f].'") style="cursor:pointer"><td>';
+                    echo '<i class="fa fa-'.FileManager::$Icons[$f].' fa-2x" aria-hidden="true" style="color:';
+                    if (FileManager::$Icons[$f]=='folder') echo'#FFB300'; else echo'#039BE5';
+                    echo'"></i>
+                    </td><td onclick=FileInfo("'.FileManager::$fileInfo[$f].'")><a href="#">'.FileManager::$files[$f][0].'</a></td><td>'.FileManager::$files[$f][1].'</td><td>'.FileManager::$files[$f][2].' bytes</td><td>'.FileManager::$files[$f][3].'</td>';
+                    echo '</tr>';
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-4 col-md-2" id="fileInfo">
+    </div>
+    </div>
+<?php
+        if (!isset($_GET['file']))
+{
+?>
+<script>
+
+    function FileInfo(url)
+    {
+        $.post(url, {modal:false},function(data){
+            console.log(data);
+            $('#fileInfo').html(data);
+
+        });
+    }
+</script>
+<?php } ?>

@@ -1,5 +1,4 @@
 <?php
-$ReturnView = '';
 
 if(!empty($_POST) or $_GET['modal']=='1')
 {
@@ -28,11 +27,13 @@ if(!empty($_POST) or $_GET['modal']=='1')
 									  </div>									  
                                           <h4 class="modal-title">'.new ADMIN_TRANSLATION(LANG,ADMIN_CONFIGURATION::$PAGE['moduleNameLang'],1,0).'</h4>
                                       </div><div class="modal-body">';
-            if ($_GET['modal']=='1') echo'<section class="panel"><header class="panel-heading">'.new ADMIN_TRANSLATION(LANG,ADMIN_CONFIGURATION::$PAGE['moduleNameLang'],1,0).'</header>
+            if ($_GET['modal']=='1') echo '<style>
+              .easy-autocomplete.eac-plate-dark ul, .easy-autocomplete.eac-plate-dark ul li{background: '.ADMIN_CONFIGURATION::$PAGE['backgroundColor'].';color: '.ADMIN_CONFIGURATION::$PAGE['textColor'].';}
+              </style>'.'<section class="panel"><header class="panel-heading" class="panel-heading" style="background: '.ADMIN_CONFIGURATION::$PAGE['backgroundColor'].';color: '.ADMIN_CONFIGURATION::$PAGE['textColor'].';">'.new ADMIN_TRANSLATION(LANG,ADMIN_CONFIGURATION::$PAGE['moduleNameLang'],1,0).'</header>
 			<div class="panel-body">';
-            if (is_file($template::$View))
-                include ($template::$View);
-            else echo'Cannot include file '.$template::$View.'. File wasn\'t found on server';
+            if (is_file(Template::$View))
+                include (Template::$View);
+            else echo'Cannot include file '.Template::$View.'. File wasn\'t found on server';
 
             if(empty($_POST['values']) and empty($_POST['now']) and !isset($_GET['modal']))echo'</div>';
             if ($_GET['modal']=='1') echo'
@@ -42,5 +43,4 @@ if(!empty($_POST) or $_GET['modal']=='1')
         }
     }
 }
-echo $ReturnView;
 ?>

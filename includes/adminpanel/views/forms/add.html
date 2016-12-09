@@ -1,0 +1,226 @@
+<?php
+foreach($header as $k=>$head)
+{
+    echo'<div class="col-md-4 col-sm-6 col-xs-12" style="text-align: center"><a href="'.$head['link'].'" data-toggle="link"><i class="fa fa-'.$head['icon'].'"> '.$head['title'].'</i></a></div>';
+}
+?>
+<form style="display: inline" action="<?=$reference['formlink']?>" id="AddForm" onsubmit="SndForm('AddForm');return false">
+<div class="col-md-12 col-sm-12 col-xs-12"  style="margin-top: 2em;padding:0px;">
+    <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+        <ul class="nav nav-tabs" id="myTabs" role="tablist">
+           <?php
+    foreach($addform as $af=>$vl)
+    {
+    ?>
+    <li role="presentation" class="<?php if($vl['number']==1) echo 'active'; ?>">
+        <a href="#<?=$vl['short']?>" id="<?=$vl['short']?>-tab" role="tab" data-toggle="tab" aria-controls="<?=$vl['short']?>" aria-expanded="false"><img src="<?=$vl['img'];?>"></a>
+    </li>
+    <? }?>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <?php
+        foreach($addform as $af=>$vl)
+        {
+        ?>
+        <div class="tab-pane fade<?php if($vl['number']==1) echo ' active in'; ?>" role="tabpanel" id="<?=$vl['short']?>" aria-labelledby="<?=$vl['short']?>-tab" style="margin-top: 0.8em">
+            <div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="<?=$vl['img'];?>"> <?=$vl['formtitle']?></label></div>
+            <div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="<?=$vl['formtitle']?>" id="titleFrom<?=$vl['langID']?>" class="form-control"></div>
+        </div>
+        <? }?>
+    </div>
+    </div>
+    <div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><?=$reference['reftable']?></label></div>
+    <div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="<?=$reference['reftable']?>" id="refTable" class="form-control" onchange="Reference()"></div>
+    <div id="place" class="col-md-12 col-sm-12 col-xs-12" style="margin-top: 1em;padding:0px;">
+
+    </div>
+    <div style="text-align: center;margin-top: 1em"><button class="btn btn-info" onclick="FormView();" type="button"><?=$reference['view']?></button> <button class="btn btn-info" onclick="AddRow();return false" type="button"><?=$reference['addrow']?></button> </div>
+
+</div>
+</form>
+
+<script>
+    var ModulesScript = '<?php echo JS ?>';
+    $.holdReady( true );
+    $.getScript(ModulesScript, function() {
+        $.holdReady( false );
+    });
+    var numberRow=0;
+    var ARow = '<?php print_r($addrow);?>';
+    var ARow = JSON.parse(ARow);
+    var Langs = '<?php print_r($addrowLangs); ?>';
+    var Langs = JSON.parse(Langs);
+    var countLangs = <?=$reference['count'];?>;
+    var countGroups = <?=$reference['countg'];?>;
+    var Access = '<?php print_r($groups); ?>';
+    var Access = JSON.parse(Access);
+    var Groups = '<?php print_r($groups); ?>';
+    var Groups = JSON.parse(Groups);
+    var Types = '<?php print_r($types); ?>';
+    var Types = JSON.parse(Types);
+    var ReferenceRows = '';
+    var selected = [];
+    var countsRows = [];
+
+    function Reference()
+    {
+        vl = $('#refTable').val();
+        $.post(admin_url+LANG+'/forms/reference/', {modal:false,table:vl},function(data){
+            ReferenceRows = JSON.parse(data);
+        });
+    }
+
+    function AddCheckbox(ID)
+    {
+        countsRows[ID]++;
+        varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'_'+countsRows[ID]+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'_'+countsRows[ID]+'" role="tablist">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<li role="presentation" class="';
+            if (i==0) varLNGS+='active';
+            varLNGS+='"><a href="#'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" id="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+        }
+        varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'_'+countsRows[ID]+'">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<div class="tab-pane fade';
+            if(i==0) varLNGS+=' active in';
+            varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" aria-labelledby="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'-tab" style="margin-top: 0.8em">';
+            varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="'+Langs[i].img+'"> '+Langs[i].formtitle+'</label></div>';
+            varLNGS+='<div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="'+Langs[i].formtitle+'" id="rowTitle_'+numberRow+'_'+Langs[i].langID+'_'+(countsRows[ID]-1)+'" class="form-control"></div></div>';
+        }
+        varLNGS+='</div></div>';
+        $('#additional'+ID).append(varLNGS);
+    }
+
+    function AddRadio(ID)
+    {
+        countsRows[ID]++;
+        varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'_'+countsRows[ID]+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'_'+countsRows[ID]+'" role="tablist">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<li role="presentation" class="';
+            if (i==0) varLNGS+='active';
+            varLNGS+='"><a href="#'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" id="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+        }
+        varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'_'+countsRows[ID]+'">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<div class="tab-pane fade';
+            if(i==0) varLNGS+=' active in';
+            varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'" aria-labelledby="'+Langs[i].short+numberRow+'_'+countsRows[ID]+'-tab" style="margin-top: 0.8em">';
+            varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="'+Langs[i].img+'"> '+Langs[i].formtitle+'</label></div>';
+            varLNGS+='<div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="'+Langs[i].formtitle+'" id="rowTitle_'+numberRow+'_'+Langs[i].langID+'_'+(countsRows[ID]-1)+'" class="form-control"></div></div>';
+        }
+        varLNGS+='</div></div>';
+        $('#additional'+ID).append(varLNGS);
+    }
+
+    function SelType(Value,ID,Title,Icon)
+    {
+        selected[ID] = Value;
+        countsRows[ID]= 1;
+        $('#type_'+ID).html('<i class="fa fa-'+decodeURI(Icon)+'" aria-hidden="true"></i> '+decodeURI(Title).substr(0,15));
+        if (Value=='checkbox'){
+            var Additional = '';
+            varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'" role="tablist">';
+            for(i=0;i<countLangs;i++)
+            {
+                varLNGS+='<li role="presentation" class="';
+                if (i==0) varLNGS+='active';
+                varLNGS+='"><a href="#'+Langs[i].short+numberRow+'" id="'+Langs[i].short+numberRow+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+            }
+            varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'">';
+            for(i=0;i<countLangs;i++)
+            {
+                varLNGS+='<div class="tab-pane fade';
+                if(i==0) varLNGS+=' active in';
+                varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'" aria-labelledby="'+Langs[i].short+numberRow+'-tab" style="margin-top: 0.8em">';
+                varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="'+Langs[i].img+'"> '+Langs[i].formtitle+'</label></div>';
+                varLNGS+='<div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="'+Langs[i].formtitle+'" id="rowTitle_'+numberRow+'_'+Langs[i].langID+'_'+(countsRows[ID]-1)+'" class="form-control"></div></div>';
+            }
+            varLNGS+='</div></div>';
+            Additional+=varLNGS+'<div style="text-align: center;margin-top: 1em"><button class="btn btn-info" onclick="AddCheckbox('+ID+');" type="button">Add checkbox</button></div>';
+            $('#additional'+ID).html(Additional);
+        }
+        if (Value=='radio') {
+
+            var Additional = '';
+            varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'" role="tablist">';
+            for(i=0;i<countLangs;i++)
+            {
+                varLNGS+='<li role="presentation" class="';
+                if (i==0) varLNGS+='active';
+                varLNGS+='"><a href="#'+Langs[i].short+numberRow+'" id="'+Langs[i].short+numberRow+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+            }
+            varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'">';
+            for(i=0;i<countLangs;i++)
+            {
+                varLNGS+='<div class="tab-pane fade';
+                if(i==0) varLNGS+=' active in';
+                varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'" aria-labelledby="'+Langs[i].short+numberRow+'-tab" style="margin-top: 0.8em">';
+                varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="'+Langs[i].img+'"> '+Langs[i].formtitle+'</label></div>';
+                varLNGS+='<div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="'+Langs[i].formtitle+'" id="rowTitle_'+numberRow+'_'+Langs[i].langID+'_'+(countsRows[ID]-1)+'" class="form-control"></div></div>';
+            }
+            varLNGS+='</div></div>';
+            Additional+=varLNGS+'<div style="text-align: center;margin-top: 1em"><button class="btn btn-info" onclick="AddRadio('+ID+');" type="button">Add radio</button></div>';
+            $('#additional'+ID).html(Additional);
+        }
+
+    }
+
+    function AddRow()
+    {
+        varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'" role="tablist">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<li role="presentation" class="';
+            if (i==0) varLNGS+='active';
+            varLNGS+='"><a href="#'+Langs[i].short+numberRow+'" id="'+Langs[i].short+numberRow+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+        }
+        varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'">';
+        for(i=0;i<countLangs;i++)
+        {
+            varLNGS+='<div class="tab-pane fade';
+            if(i==0) varLNGS+=' active in';
+            varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'" aria-labelledby="'+Langs[i].short+numberRow+'-tab" style="margin-top: 0.8em">';
+            varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label><img src="'+Langs[i].img+'"> '+Langs[i].formtitle+'</label></div>';
+            varLNGS+='<div class="col-md-8 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><input type="text" placeholder="'+Langs[i].formtitle+'" id="rowTitle_'+numberRow+'_'+Langs[i].langID+'" class="form-control"></div></div>';
+        }
+        varLNGS+='</div></div>';
+        var acc = '<select id="access'+numberRow+'" class="form-control"><option value="0"> '+ARow.all+'</option>';
+        for(i=0;i<countGroups;i++)
+        {
+            acc+='<option value="'+Groups[i].ID+'">'+Groups[i].title+'</option>';
+        }
+        acc+='</select>';
+        var type = '<div class="btn-group open"><button class="btn btn-white" type="button" id="type_'+numberRow+'">'+ARow.type+'</button>';
+        type+='<button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button" aria-expanded="true"><span class="caret"></span></button>';
+        type+='<ul role="menu" class="dropdown-menu">';
+        for(i=0;i<12;i++)
+        {
+            type+='<li><a href=javascript:SelType("'+Types[i].vl+'",'+numberRow+',"'+encodeURIComponent(Types[i].title)+'","'+encodeURIComponent(Types[i].icon)+'")><i class="fa fa-'+Types[i].icon+'" aria-hidden="true"></i> '+Types[i].title+'</a></li>';
+        }
+
+        type+='</ul></div>';
+        var Ref = '<select id="reference'+numberRow+'" class="form-control">';
+        for(k=0;k<ReferenceRows.length;k++)
+            Ref+='<option value="'+ReferenceRows[k].rowID+'">'+ReferenceRows[k].name+'</option>';
+        Ref+='</select>';
+
+        $('#place').append('<div id="Row'+numberRow+'"  class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0.8em;border:1px solid #009da7">' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;"><label>'+ARow.type+'</label></div>' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;">'+type+'</div>' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;text-align: center"><label>'+ARow.must+'</label> <input type="checkbox" id="MustRow'+numberRow+'"></div>' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;"><label>'+ARow.ref_row+'</label> '+Ref+'</div>' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;text-align: center"><label>'+ARow.access+'</label></div>' +
+                '<div class="col-md-2 col-sm-2 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;">'+acc+'</div>' +
+                '<div class="col-md-12 col-sm-12 col-xs-12" style="padding:0px;padding-top:0.5em;padding-bottom:0.5em;">'+varLNGS+'</div>' +
+                '<div class="col-md-12 col-sm-12 col-xs-12" style="padding:0px;" id="additional'+numberRow+'"></div>' +
+                '</div>');
+        numberRow++;
+    }
+
+
+
+</script>

@@ -1,0 +1,11 @@
+<?php
+if (!isset($_GET['fl'])) exit;
+?>
+<form action="<?php echo ADMIN_CONFIGURATION::$CONFIG['adminURL'].LANG; ?>/filemanager/?action=uploadfile&modal=1" id="UForm<?php echo $_GET['fl'];?>" method="post" enctype="multipart/form-data">
+ <input type="file" id="file" value="<?php echo $_GET['fileway']; ?>" name="file">
+ <input name="path" value="<?php echo $_GET['way']; ?>">
+</form>
+<script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/js/jquery.js"></script>
+<script>
+ //$('#UForm<?php echo $_GET['fl'];?>').submit();
+</script>

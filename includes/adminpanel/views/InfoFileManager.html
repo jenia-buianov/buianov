@@ -1,10 +1,29 @@
  <?php
 
-echo '<div style="text-align: center"><i class="fa fa-'.InfoFileManager_Model::$Icons[0].' fa-2x" aria-hidden="true" style="color:';
+echo '<div style="text-align: center"><i class="fa fa-'.InfoFileManager_Model::$Icons[0].'" aria-hidden="true" style="color:';
 if (InfoFileManager_Model::$Icons[0]=='folder') echo'#FFB300'; else echo'#039BE5';
-echo'"></i></div>';
+echo';font-size:7em"></i></div>';
  echo '<h3 style="text-align: center;margin-top: 1em;margin-bottom: 2em; ">'.InfoFileManager_Model::$fileInfo[0][0].'</h3>';
- echo '<p><label style="width:50%">Дата:</label> '.InfoFileManager_Model::$fileInfo[0][1].'</p>';
- echo '<p><label style="width:50%">Время:</label> '.InfoFileManager_Model::$fileInfo[0][2].'</p>';
- echo '<p><label style="width:50%">Владелец:</label> '.InfoFileManager_Model::$fileInfo[0][3].'</p>';
+ echo '<p><label style="width:50%">'.new ADMIN_TRANSLATION(LANG,'Date',1,0).' :</label> '.InfoFileManager_Model::$fileInfo[0][1].'</p>';
+ echo '<p><label style="width:50%">'.new ADMIN_TRANSLATION(LANG,'Time',1,0).' :</label> '.InfoFileManager_Model::$fileInfo[0][2].'</p>';
+ echo '<p><label style="width:50%">'.new ADMIN_TRANSLATION(LANG,'Owner',1,0).' :</label> '.InfoFileManager_Model::$fileInfo[0][3].'</p>';
+ echo '<p><label style="width:50%">'.new ADMIN_TRANSLATION(LANG,'Size',1,0).' :</label> '.InfoFileManager_Model::$fileInfo[0][7].'</p>';
+ if (isset(InfoFileManager_Model::$fileInfo[0][8])) echo '<div class="form-inline" style="margin-top: 1em;text-align: center" >';
+ if (isset(InfoFileManager_Model::$fileInfo[0][4]))
+ echo '<a href="'.InfoFileManager_Model::$fileInfo[0][5].'" data-toggle="href" style="font-size:0.92em"><button class="btn btn-info active" aria-pressed="true" style="font-size:0.92em;margin-right: 0.16em">
+     <i class="fa fa-download style="color:#ff6c60"></i> '.new ADMIN_TRANSLATION(LANG,'download',1,0).'  </button></a>';
+  if (isset(InfoFileManager_Model::$fileInfo[0][6]))
+  echo '<a href="'.InfoFileManager_Model::$fileInfo[0][6].'" data-toggle="href"><button class="btn btn-primary active" aria-pressed="true" style="font-size:0.92em">
+  <i class="fa fa-pencil style="color:#ff6c60;"></i> '.new ADMIN_TRANSLATION(LANG,'Edit',1,0).'  </button></a>';
+  if (!empty(InfoFileManager_Model::$fileInfo[0][8]))
+  echo '
+  <p style="text-align: center"><br>
+   <button class="btn btn-primary active" aria-pressed="true" style="font-size:0.92em" id="RenameBtn" onclick="Rename()">
+    <i class="fa fa-pencil-square-o style="color:#ff6c60;"></i> '.new ADMIN_TRANSLATION(LANG,'rename',1,0).'  </button>
+  </p>
+  <p style="text-align: center">
+   <button class="btn btn-danger active" aria-pressed="true" style="font-size:0.92em" id="CopyBtn" onclick="CopyFile()" data-text="'.InfoFileManager_Model::$fileInfo[0][8].'">
+   <i class="fa fa-link style="color:#ff6c60;"></i> '.new ADMIN_TRANSLATION(LANG,'CopyLink',1,0).'  </button>
+  ';
+  if (isset(InfoFileManager_Model::$fileInfo[0][8])) echo '</div>';
 ?>

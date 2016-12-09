@@ -1,0 +1,95 @@
+<?php
+foreach($header as $k=>$head)
+{
+    echo'<div class="col-md-4 col-sm-6 col-xs-12" style="text-align: center"><a href="'.$head['link'].'" data-toggle="link"><i class="fa fa-'.$head['icon'].'"> '.$head['title'].'</i></a></div>';
+}
+?>
+<div class="col-xs-12 col-md-12 col-sm-12" style="margin-top: 1em;margin-bottom: 1em">
+    <form method="post" style="display: inline;" action="<?=$Titles['search_link']?>" onsubmit="mSearch();return false"><input type="text" placeholder="<?=$Titles['search'];?>" class="form-control" id="moduleSearch" onchange="mSearch();"></form>
+</div>
+<style><?php
+    foreach($tHeader as $h=>$v)
+    {
+        if ($v['show']==1)  echo '@media(min-width:1024px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:table-cell;}}'."\n\n";else echo '@media(min-width:1024px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:none;}}'."\n\n";
+        if ($v['showTablet']==1)  echo '@media(max-width:1023px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:table-cell;}}'."\n\n";else echo '@media(max-width:1023px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:none;}}'."\n\n";
+        if ($v['showMobile']==1)  echo '@media(max-width:758px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:table-cell;}}'."\n\n";else echo '@media(max-width:758px){ th[data-role="'.$v['rowID'].'"], td[data-role="'.$v['rowID'].'"]{display:none;}}'."\n\n";
+    }
+    ?>
+</style>
+
+<div class="col-xs-12 col-md-12 col-sm-12" style="margin-top: 1em;margin-bottom: 1em">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+            <?php
+
+            foreach($tHeader as $h=>$v)
+            echo '<th data-role="'.$v['rowID'].'">'.$v['name'].'</th>';
+
+            ?>
+            <th data-role="Edit"><?=$editButtons['Edit'];?></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+
+            foreach($users as $h=>$v)
+            {
+              echo'<tr data-role="'.$v['userID'].'">';
+                foreach($v as $key=>$value)
+                {
+                    if ($key=='userGroup') {
+                        foreach($groups as $numb=>$k)
+                        {
+                            if ($value==$k['ID']) echo'<td data-role="'.$key.'">'.$k['Name'].'</td>';
+                        }
+                    }
+                    else echo '<td data-role="'.$key.'">'.$value.'</td>';
+                }
+                echo '<td data-role="Edit"><a class="btn btn-white" href="'.ADMIN_CONFIGURATION::$CONFIG['adminURL'].LANG.'/users/edit/'.$v['userID'].'" data-toggle="link" data-title = "'.$editButtons['Edit'].'" style="    padding-left: 0.5em;
+    padding-bottom: 0.2em;
+    padding-top: 0.2em;
+    padding-right: 0.5em;"><i class="fa fa-pencil" aria-hidden="true"></i></a> <button class="btn btn-danger active" data-title = "'.$editButtons['Delete'].'" data-toggle="link" onclick="DellUser()" style="    padding-left: 0.5em;
+    padding-bottom: 0.2em;
+    padding-top: 0.2em;
+    padding-right: 0.5em;"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>';
+                echo'</tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="<?php echo ADMIN_CONFIGURATION::$CONFIG['homeURL']; ?>adminpanel/assets/autocompleate/jquery.easy-autocomplete.js"></script>
+<script>
+    var ModulesScript = '<?php echo JS ?>';
+    var searchLink = '<?php echo $Titles["search_json_link"]?>';
+    if (ModulesScript!=='') {
+        $.holdReady(true);
+        $.getScript(ModulesScript, function () {
+            $.holdReady(false);
+        });
+    }
+    var options = {
+        url: searchLink,
+
+        getValue: "userLogin",
+
+
+        list: {
+            match: {
+                enabled: true
+            }
+        },
+
+        theme: "plate-dark"
+    };
+    $("#moduleSearch").easyAutocomplete(options);
+    function mSearch(){
+        vl = $('#moduleSearch').val();
+
+    }
+
+</script>

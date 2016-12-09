@@ -56,7 +56,6 @@ function SendForm(FormID,Refresh,Reset)
 			}
 		}
 	}
-	console.log(Form);
 	Status = $('#'+FormID+' #FormResultStatus').val().split(',');
 	if (empty!=='') 
 	{
@@ -253,4 +252,36 @@ toastr.options = {
 			});
 	}
 	return false;
+}
+function FormView()
+{
+	varLNGS = '<div class="bs-example bs-example-tabs" data-example-id="togglable-tabs'+numberRow+'"> <ul class="nav nav-tabs" id="Tabs'+numberRow+'" role="tablist">';
+	for(i=0;i<countLangs;i++)
+	{
+		varLNGS+='<li role="presentation" class="';
+		if (i==0) varLNGS+='active';
+		varLNGS+='"><a href="#'+Langs[i].short+numberRow+'" id="'+Langs[i].short+numberRow+'-tab" role="tab" data-toggle="tab" aria-controls="'+Langs[i].short+numberRow+'" aria-expanded="false"><img src="'+Langs[i].img+'"></a> </li>';
+	}
+	varLNGS+='</ul><div class="tab-content" id="TContent'+numberRow+'">';
+	for(i=0;i<countLangs;i++)
+	{
+		varLNGS+='<div class="tab-pane fade';
+		if(i==0) varLNGS+=' active in';
+		varLNGS+='" role="tabpanel" id="'+Langs[i].short+numberRow+'" aria-labelledby="'+Langs[i].short+numberRow+'-tab" style="margin-top: 0.8em">';
+		varLNGS+='<div class="col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0.8em;padding:0px;">';
+		for(k=0;k<numberRow;k++)
+		{
+			if ($('#MustRow'+k).prop('checked')==true) must = ' <span style="color:red">*</span>'; else must = '';
+			varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label>'+$('#rowTitle_'+k+'_'+Langs[i].langID).val()+'</label>'+must+'</div>';
+			varLNGS+='<div class="col-md-4 col-sm-6 col-xs-12" style="margin-bottom: 0.8em;padding:0px;"><label>'+selected[k]+'</label></div>';
+
+		}
+		varLNGS+='</div>';
+	}
+	varLNGS+='</div></div></div>';
+	var w = window.open();
+	var html = '<html><head><script src="'+home_url+'adminpanel/js/jquery.js"></script><script src="'+home_url+'adminpanel/js/bootstrap.min.js"></script><link href="'+home_url+'adminpanel/css/bootstrap.min.css" rel="stylesheet"><link href="'+home_url+'adminpanel/css/bootstrap-reset.css" rel="stylesheet"><link href="'+home_url+'adminpanel/css/style.css" rel="stylesheet"> </head><body>'+varLNGS;
+	html+='</body></html>';
+
+	$(w.document.body).html(html);
 }

@@ -22,7 +22,10 @@ class TRANSLATION extends GETS{
 	{
 		if (count(self::$getTranslation)==0) return self::$getTranslation;
 		else if ($ResultType==1)	echo(new GETS(htmlspecialchars_decode(self::$getTranslation[0]['text'])));
-			 else return  new GETS(htmlspecialchars_decode(self::$getTranslation[0]['text']));
+			 else {
+			     self::$RESULT = new GETS(htmlspecialchars_decode(self::$getTranslation[0]['text']));
+			     return  self::$RESULT;
+             }
 	}
 	
 	

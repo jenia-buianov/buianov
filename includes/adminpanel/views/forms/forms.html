@@ -1,0 +1,43 @@
+<?php
+foreach($header as $k=>$head)
+{
+    echo'<div class="col-md-4 col-sm-6 col-xs-12" style="text-align: center"><a href="'.$head['link'].'" data-toggle="link"><i class="fa fa-'.$head['icon'].'"> '.$head['title'].'</i></a></div>';
+}
+?>
+<div class="col-md-12 col-sm-12 col-xs-12"  style="margin-top: 2em">
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <th>#</th>
+            <th><?=$tableHeader['title']?></th>
+            <th><?=$tableHeader['activity']?></th>
+            <th><?=$tableHeader['edit']?></th>
+
+        </thead>
+        <tbody>
+        <?php
+        if (count($Dates)>0)
+        {
+        foreach($Dates as $dates=>$value)
+        {
+            ?>
+            <tr data-role="<?=$value['formID']?>">
+                <td><?=$value['number'];?></td>
+                <td><?=$value['title'];?></td>
+                <td><?=$value['enabled'];?></td>
+                <td><a class="btn btn-white" href="'.$value['edit'].'" data-toggle="link" data-title = "'.$editButtons['Edit'].'"><i class="fa fa-pencil" aria-hidden="true"></i></a> <button class="btn btn-danger active" data-title = "'.$editButtons['Delete'].'" data-toggle="link" onclick="DellUser()"><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+            </tr>
+        <?
+        }
+        } ?>
+        </tbody>
+    </table>
+    </div>
+</div>
+<script>
+    var ModulesScript = '<?php echo JS ?>';
+    $.holdReady( true );
+    $.getScript(ModulesScript, function() {
+        $.holdReady( false );
+    });
+</script>

@@ -7,40 +7,44 @@ class Template{
     public static $View = NULL;
     public static $Model = NULL;
     private static $count=0;
+    public static $Arrays = array();
 
     public function __construct($filename)
     {
         self::$Directory = $filename;
-        if (self::$count==0) $this->setController();
-        if (self::$count==1) self::setModel();
-        if (self::$count==2) self::setView();
-        if (self::$count==3) $this->setTemplate();
+        if (self::$count==0) $this->setController($filename);
+        if (self::$count==1) self::setModel($filename);
+        if (self::$count==2) self::setView($filename);
+        if (self::$count==3) $this->setTemplate($filename);
         self::$count++;
     }
 
-    private function setController()
+    private function setController($filename)
     {
-        self::$Controller = self::$Directory;
-        if (file_exists(self::$Controller)) include_once(self::$Controller);
+        self::$Controller = $filename;
+        if (file_exists(self::$Controller)) include(self::$Controller);
     }
-    private function setTemplate()
+    private function setTemplate($filename)
     {
-        self::$Template = self::$Directory;
-        include_once(self::$Template);
-    }
-
-    public static function setView()
-    {
-       if (file_exists(self::$Directory) and self::$View==NULL)  self::$View = self::$Directory;
-
+        self::$Template = $filename;
+        include(self::$Template);
     }
 
-    public static function setModel()
+    public static function setView($filename)
     {
-        if (file_exists(self::$Directory) and self::$Model==NULL) {
-            self::$Model = self::$Directory;
-            include_once(self::$Model);
+       if (file_exists($filename) and self::$View==NULL)  self::$View = $filename;
+    }
+
+    public static function setModel($filename)
+    {
+        if (file_exists($filename) and self::$Model==NULL) {
+            self::$Model = $filename;
+            include(self::$Model);
         }
+    }
+    public static function setVariables($Class,$Array)
+    {
+        self::$Arrays[] = $Class::$$Array;
     }
 
 }

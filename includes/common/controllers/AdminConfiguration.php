@@ -27,7 +27,10 @@ class ADMIN_CONFIGURATION extends CONFIGURATION{
 			if (!empty($arrayROUTE[1]))
 			{
 			    $findUserLanguage = parent::select('admin_languages','`languageID`',"`languageShort`='".$arrayROUTE[1]."' AND `isEnabled`='1'",'');
-				if (is_array($findUserLanguage)) $this->LANG = $arrayROUTE[1];
+				if (is_array($findUserLanguage)){
+				    $this->LANG = $arrayROUTE[1];
+                    define('LANG_ID',$findUserLanguage[0]['languageID']);
+                }
 			}
 			if (empty($arrayROUTE[2])&&empty($arrayROUTE[3]))
 			{
@@ -55,9 +58,9 @@ class ADMIN_CONFIGURATION extends CONFIGURATION{
 		
 		define('MODULE',$this->MODULE);
 		define('LANG',$this->LANG);
-		define('PAGE',$this->PAGE_);
+		define('PAGE_',$this->PAGE_);
 		define('ID',$this->ID);
-		
+
 	}
 	
 	private function FindPageInDB()
@@ -70,13 +73,26 @@ class ADMIN_CONFIGURATION extends CONFIGURATION{
 			exit;
 		}
 		elseif(!empty($this->PAGE_)) {
-			$getPage = parent::select('modules','*',"`moduleTitle`='{$this->MODULE}' AND `isEnabled`='1' AND `adminPanel`='1' AND (`accessGroup` IN ('".$thisUser->GROUP."') OR `accessUsers` IN ('".$thisUser->USERID."'))",'');
+		    $StartFile = $getPage[0]['StartFile'];
+            $Directory = $getPage[0]['moduleDirectory'];
+            $Reference = $getPage[0]['tableReference'];
+            $Tcolor = $getPage[0]['textColor'];
+            $Bcolor = $getPage[0]['backgroundColor'];
+			$getPage = parent::select('module_pages','*',"`modulePageTitle`='{$this->PAGE_}' AND `isEnabled`='1' AND `moduleTitle`='{$this->MODULE}' AND `accessGroup` IN ('".$thisUser->GROUP."')",'');
 			if (count($getPage)==0){
 				header("HTTP/1.0 404 Not Found");
                 require_once(dirname(__FILE__).'/../../common/views/404.php');
 				exit;
-			}else self::$PAGE = $getPage[0];
-		}else self::$PAGE = $getPage[0];
+			}else {
+
+			    self::$PAGE = $getPage[0];
+                self::$PAGE['StartFile'] = $StartFile;
+                self::$PAGE['moduleDirectory'] = $Directory;
+                self::$PAGE['tableReference'] = $Reference;
+                self::$PAGE['textColor'] = $Tcolor;
+                self::$PAGE['backgroundColor'] = $Bcolor;
+            }
+		}else  self::$PAGE = $getPage[0];
 		
 	}
 	

@@ -11,13 +11,25 @@
             </div>
 
         </div>
-        <button data-toggle="button" class="btn btn-white active" aria-pressed="true">
-            <i class="fa fa-upload" style="color:#ff6c60"></i> <?php new ADMIN_TRANSLATION(LANG,'Upload',1,1)?>  </button>
+        <form action="<?php echo ADMIN_CONFIGURATION::$CONFIG['adminURL'].LANG; ?>/filemanager/?action=uploadfile&modal=1" method="post" id="UForm" enctype="multipart/form-data" style="display: inline;">
+        <div class="fileupload fileupload-new" data-provides="fileupload" style="width: auto">
+            <input type="hidden" onchange="$('#UForm').submit()">
+            <span class="btn btn-white btn-file">
+                                                <span class="fileupload-new" id="UploadButton"><i class="fa fa-upload" style="color:#ff6c60"></i> <?php new ADMIN_TRANSLATION(LANG,'Upload',1,1)?></span>
+                <span class="fileupload-exists"><i class="fa fa-upload" style="color:#ff6c60"></i>  <?php new ADMIN_TRANSLATION(LANG,'uploading file',1,1)?></span>
+                <input name="file" type="file" id="Uploader" class="default" onchange="$('#UForm').submit()">
+                                                </span>
+            <span class="fileupload-preview" style="margin-left:5px;"></span>
+            <a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none; margin-left:5px;"></a>
+        </div>
+            <input name="path" value="<?php echo urldecode($_GET['path']); ?>" type="hidden">
+        </form>
+
         <font id="createfolder" style="margin-left:1em">
-            <button data-toggle="button" class="btn btn-white active" aria-pressed="true">
+            <button data-toggle="button" class="btn btn-white active" aria-pressed="true" onclick="CreateFolder('<?php echo urldecode($_GET['path']); ?>')">
                 <i class="fa fa-folder" style="color:#58c9f3"></i> <?php new ADMIN_TRANSLATION(LANG,'CreateFolder',1,1)?>  </button>
         </font>
-        <div class="table-responsive" tabindex="1" style="outline: none;">
+        <div id="DivFileManager" class="table-responsive" tabindex="1" style="outline: none;    overflow: auto;">
             <table class="table" id="FileManageTable">
                 <thead>
                 <tr>
@@ -37,7 +49,7 @@
                     echo '<i class="fa fa-'.FileManager::$Icons[$f].' fa-2x" aria-hidden="true" style="color:';
                     if (FileManager::$Icons[$f]=='folder') echo'#FFB300'; else echo'#039BE5';
                     echo'"></i>
-                    </td><td onclick=FileInfo("'.FileManager::$fileInfo[$f].'")><a href="#">'.FileManager::$files[$f][0].'</a></td><td>'.FileManager::$files[$f][1].'</td><td>'.FileManager::$files[$f][2].' bytes</td><td>'.FileManager::$files[$f][3].'</td>';
+                    </td><td onclick=FileInfo("'.FileManager::$fileInfo[$f].'")><a data-toggle="link" href="'.FileManager::$files[$f][4].'">'.FileManager::$files[$f][0].'</a></td><td>'.FileManager::$files[$f][1].'</td><td>'.FileManager::$files[$f][2].'</td><td>'.FileManager::$files[$f][3].'</td>';
                     echo '</tr>';
                 }
                 ?>
@@ -54,13 +66,15 @@
 ?>
 <script>
 
-    function FileInfo(url)
-    {
-        $.post(url, {modal:false},function(data){
-            console.log(data);
-            $('#fileInfo').html(data);
+    var Uploading = '<?php new ADMIN_TRANSLATION(LANG,'uploading file',1,1); ?>';
+    var Getpath = '<?php urldecode($_GET['path']) ?>';
+    var Renamed = '<?php new ADMIN_TRANSLATION(LANG,'Renamed',1,1); ?>';
+    var WasCopied = '<?php new ADMIN_TRANSLATION(LANG,'LinkWasCopied',1,1); ?> ';
+    var FilemanagerScript = '<?php echo JS ?>';
+    $.holdReady( true );
+    $.getScript(FilemanagerScript, function() {
+        $.holdReady( false );
+    });
 
-        });
-    }
 </script>
 <?php } ?>
